@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:movies/src/models/cast_model.dart';
 import 'package:movies/src/models/movie_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -33,7 +34,7 @@ class MoviesProvider {
   Future<List<Movie>> getAtTheaters() async {
     final url = Uri.https(_url, '3/movie/now_playing', {
       'api_key': _apikey,
-      'f48a2bbc3dda78c244fb75815cac1da3': _language,
+      'language': _language,
     });
     return await _processRespond(url);
   }
@@ -45,7 +46,7 @@ class MoviesProvider {
 
     final url = Uri.https(_url, '3/movie/popular', {
       'api_key': _apikey,
-      'f48a2bbc3dda78c244fb75815cac1da3': _language,
+      'language': _language,
       'page': _popularPage.toString(),
     });
 
@@ -56,5 +57,18 @@ class MoviesProvider {
 
     _loadingMovies = false;
     return response;
+  }
+
+  Future<List<Actor>> getCast(String movieId) async {
+    final url = Uri.https(_url, '3/movie/$movieId/credits', {
+      'api_key': _apikey,
+      'language': _language,
+    });
+
+    final response = await http.get(url);
+    final decodedData = json.decode(response.body);
+    final casting = new Cast.fromJsonList(decodedData['cast']);
+
+    return casting.cast;
   }
 }

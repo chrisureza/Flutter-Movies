@@ -70,4 +70,12 @@ class Movie {
       return 'https://image.tmdb.org/t/p/w500/$posterPath';
     }
   }
+
+  getBackdropImg() {
+    if (posterPath == null) {
+      return 'https://snaptubedownloadapp.com/wp-content/themes/g_2018_04/images/noimage.gif';
+    } else {
+      return 'https://image.tmdb.org/t/p/w500/$backdropPath';
+    }
+  }
 }
