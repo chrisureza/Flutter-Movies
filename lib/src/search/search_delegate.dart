@@ -5,16 +5,16 @@ import 'package:movies/src/providers/movies_provider.dart';
 class DataSearch extends SearchDelegate {
   final moviesProvider = new MoviesProvider();
 
-  final movies = [
-    'Spiderman',
-    'Capitan America',
-    'Spiderman2',
-    'Capitan America2',
-    'Spiderman3',
-    'Capitan America3'
-  ];
+  // final movies = [
+  //   'Spiderman',
+  //   'Capitan America',
+  //   'Spiderman2',
+  //   'Capitan America2',
+  //   'Spiderman3',
+  //   'Capitan America3'
+  // ];
 
-  final recentMovies = ['Spiderman', 'Capitan America'];
+  // final recentMovies = ['Spiderman', 'Capitan America'];
 
   @override
   List<Widget> buildActions(BuildContext context) {
