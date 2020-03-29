@@ -13,8 +13,8 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-          title: Text('Movies at theaters'),
-          backgroundColor: Colors.indigoAccent,
+          title: Text('Monday Movies'),
+          backgroundColor: Colors.yellow[800],
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.search),
@@ -40,8 +40,20 @@ class HomePage extends StatelessWidget {
       future: moviesProvider.getAtTheaters(),
       builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
         if (snapshot.hasData) {
-          return CardSwiper(
-            movies: snapshot.data,
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(left: 20.0),
+                child: Text(
+                  'Now at theaters:',
+                  style: Theme.of(context).textTheme.title,
+                ),
+              ),
+              CardSwiper(
+                movies: snapshot.data,
+              ),
+            ],
           );
         } else {
           return Container(
