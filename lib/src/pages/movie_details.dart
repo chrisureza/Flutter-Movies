@@ -20,8 +20,6 @@ class MovieDetail extends StatelessWidget {
                 _posterTitle(context, movie),
                 SizedBox(height: 15.0),
                 _showMovieInfo(context, movie),
-                _description(context, movie),
-                _showCast(context, movie),
               ]),
             )
           ],
@@ -110,7 +108,123 @@ class MovieDetail extends StatelessWidget {
     );
   }
 
-  Widget _description(BuildContext context, Movie movie) {
+  Widget _showMovieInfo(BuildContext context, Movie movie) {
+    final moviesProvider = new MoviesProvider();
+
+    return FutureBuilder(
+      future: moviesProvider.getMovieInfo(movie.id.toString()),
+      builder: (BuildContext context, AsyncSnapshot<MovieInfo> snapshot) {
+        if (snapshot.hasData) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              _showGenres(context, snapshot),
+              SizedBox(
+                height: 10.0,
+              ),
+              _showReleaseDate(context, snapshot),
+              SizedBox(
+                height: 15.0,
+              ),
+              _showRuntime(context, snapshot),
+              _overview(context, movie),
+              _showCast(context, movie),
+            ],
+          );
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+
+  Widget _showGenres(BuildContext context, AsyncSnapshot<MovieInfo> snapshot) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.only(left: 20.0),
+          child: Text(
+            'Genres:',
+            style: Theme.of(context).textTheme.subtitle,
+          ),
+        ),
+        SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          scrollDirection: Axis.horizontal,
+          child: _genresTagsRow(snapshot),
+        ),
+      ],
+    );
+  }
+
+  Widget _genresTagsRow(AsyncSnapshot<MovieInfo> snapshot) {
+    return Row(
+      children: snapshot.data.genres
+          .map((genre) => Container(
+                margin: EdgeInsets.only(
+                  right: 8.0,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(6.0),
+                  child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 4.0,
+                      ),
+                      color: Colors.amber[700],
+                      child: Text(
+                        genre['name'],
+                        style: TextStyle(color: Colors.grey[100]),
+                      )),
+                ),
+              ))
+          .toList(),
+    );
+  }
+
+  Widget _showReleaseDate(
+      BuildContext context, AsyncSnapshot<MovieInfo> snapshot) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.only(left: 20.0),
+          child: Row(children: <Widget>[
+            Text(
+              'Release date: ',
+              style: Theme.of(context).textTheme.subtitle,
+            ),
+            Text(
+              snapshot.data.releaseDate.toString(),
+            ),
+          ]),
+        ),
+      ],
+    );
+  }
+
+  Widget _showRuntime(BuildContext context, AsyncSnapshot<MovieInfo> snapshot) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.only(left: 20.0),
+          child: Row(children: <Widget>[
+            Text(
+              'Runtime: ',
+              style: Theme.of(context).textTheme.subtitle,
+            ),
+            Text(
+              '${snapshot.data.runtime} min',
+            ),
+          ]),
+        ),
+      ],
+    );
+  }
+
+  Widget _overview(BuildContext context, Movie movie) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
       child: Column(
@@ -191,125 +305,27 @@ class MovieDetail extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        Text(
-          actor.name,
-          overflow: TextOverflow.ellipsis,
+        SizedBox(
+          height: 2.0,
+        ),
+        Container(
+          width: 100.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                actor.name,
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                actor.character,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Colors.grey[600]),
+              ),
+            ],
+          ),
         ),
       ],
     ));
-  }
-
-  Widget _showMovieInfo(BuildContext context, Movie movie) {
-    final moviesProvider = new MoviesProvider();
-
-    return FutureBuilder(
-      future: moviesProvider.getMovieInfo(movie.id.toString()),
-      builder: (BuildContext context, AsyncSnapshot<MovieInfo> snapshot) {
-        if (snapshot.hasData) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _showGenres(context, snapshot),
-              SizedBox(
-                height: 10.0,
-              ),
-              _showReleaseDate(context, snapshot),
-              SizedBox(
-                height: 15.0,
-              ),
-              _showRuntime(context, snapshot),
-            ],
-          );
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      },
-    );
-  }
-
-  Widget _showGenres(BuildContext context, AsyncSnapshot<MovieInfo> snapshot) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.only(left: 20.0),
-          child: Text(
-            'Genres:',
-            style: Theme.of(context).textTheme.subtitle,
-          ),
-        ),
-        SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-          scrollDirection: Axis.horizontal,
-          child: _genresTagsRow(snapshot),
-        ),
-      ],
-    );
-  }
-
-  Widget _genresTagsRow(AsyncSnapshot<MovieInfo> snapshot) {
-    return Row(
-      children: snapshot.data.genres
-          .map((genre) => Container(
-                margin: EdgeInsets.only(
-                  right: 8.0,
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(6.0),
-                  child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 4.0,
-                      ),
-                      color: Colors.amber[700],
-                      child: Text(
-                        genre['name'],
-                        style: TextStyle(color: Colors.grey[100]),
-                      )),
-                ),
-              ))
-          .toList(),
-    );
-  }
-
-  Widget _showRuntime(BuildContext context, AsyncSnapshot<MovieInfo> snapshot) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.only(left: 20.0),
-          child: Row(children: <Widget>[
-            Text(
-              'Runtime: ',
-              style: Theme.of(context).textTheme.subtitle,
-            ),
-            Text(
-              '${snapshot.data.runtime} min',
-            ),
-          ]),
-        ),
-      ],
-    );
-  }
-
-  Widget _showReleaseDate(
-      BuildContext context, AsyncSnapshot<MovieInfo> snapshot) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.only(left: 20.0),
-          child: Row(children: <Widget>[
-            Text(
-              'Release date: ',
-              style: Theme.of(context).textTheme.subtitle,
-            ),
-            Text(
-              snapshot.data.releaseDate.toString(),
-            ),
-          ]),
-        ),
-      ],
-    );
   }
 }
