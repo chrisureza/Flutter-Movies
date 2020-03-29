@@ -3,6 +3,7 @@ import 'package:movies/src/providers/movies_provider.dart';
 import 'package:movies/src/search/search_delegate.dart';
 import 'package:movies/src/widgets/card_swiper_widget.dart';
 import 'package:movies/src/widgets/movie_horizontal.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatelessWidget {
   final moviesProvider = new MoviesProvider();
@@ -20,6 +21,46 @@ class HomePage extends StatelessWidget {
               icon: Icon(Icons.search),
               onPressed: () {
                 showSearch(context: context, delegate: DataSearch());
+              },
+            ),
+            PopupMenuButton(
+              itemBuilder: (BuildContext context) {
+                return [
+                  // PopupMenuItem(
+                  //   value: 'toogleTvShows',
+                  //   child: Text('See TV Shows'),
+                  // ),
+                  // PopupMenuItem(
+                  //   value: 'aboutPage',
+                  //   child: Text('About Page'),
+                  // ),
+                  PopupMenuItem(
+                    value: 'sourceCode',
+                    child: Text('Source Code'),
+                  ),
+                  PopupMenuItem(
+                    value: 'goToMySite',
+                    child: Text('Chrisureza web site'),
+                  ),
+                ];
+              },
+              onSelected: (result) {
+                _launchURL(url) async {
+                  if (await canLaunch(url)) {
+                    await launch(url);
+                  } else {
+                    throw 'Could not launch $url';
+                  }
+                }
+
+                switch (result) {
+                  case 'sourceCode':
+                    _launchURL('https://github.com/chrisureza/Flutter-Movies');
+                    break;
+                    case 'goToMySite':
+                    _launchURL('https://chrisureza.com/');
+                    break;
+                }
               },
             ),
           ]),
