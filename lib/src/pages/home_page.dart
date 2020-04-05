@@ -35,30 +35,15 @@ class HomePage extends StatelessWidget {
                   //   child: Text('About Page'),
                   // ),
                   PopupMenuItem(
-                    value: 'sourceCode',
-                    child: Text('Source Code'),
-                  ),
-                  PopupMenuItem(
-                    value: 'goToMySite',
-                    child: Text('Chrisureza web site'),
+                    value: 'about',
+                    child: Text('About'),
                   ),
                 ];
               },
               onSelected: (result) {
-                _launchURL(url) async {
-                  if (await canLaunch(url)) {
-                    await launch(url);
-                  } else {
-                    throw 'Could not launch $url';
-                  }
-                }
-
                 switch (result) {
-                  case 'sourceCode':
-                    _launchURL('https://github.com/chrisureza/Flutter-Movies');
-                    break;
-                    case 'goToMySite':
-                    _launchURL('https://chrisureza.com/');
+                  case 'about':
+                    Navigator.pushNamed(context, 'about');
                     break;
                 }
               },
