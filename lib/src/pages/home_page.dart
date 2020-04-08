@@ -3,7 +3,6 @@ import 'package:movies/src/providers/movies_provider.dart';
 import 'package:movies/src/search/search_delegate.dart';
 import 'package:movies/src/widgets/card_swiper_widget.dart';
 import 'package:movies/src/widgets/movie_horizontal.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatelessWidget {
   final moviesProvider = new MoviesProvider();
