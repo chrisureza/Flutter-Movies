@@ -63,7 +63,7 @@ class AboutPage extends StatelessWidget {
     final text = "This app was made for me to practice Flutter and have the code available for future references. \n\n" +
         "The code for this app is public and you can find it at my personal Github.\n\n" +
         "Below is the link to the repository and also a link to my personal website where you can take a look at some other of my projects, my personal life and my social media accounts.\n\n" +
-        "Hope you enjoyed this app and find it useful. Thanks for downloaded it! :D";
+        "Hope you enjoyed this app and found it useful. Thanks for downloaded it! :D";
     return SafeArea(
       child: Container(
         padding: EdgeInsets.symmetric(
